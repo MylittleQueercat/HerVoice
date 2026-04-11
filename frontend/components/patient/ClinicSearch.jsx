@@ -29,7 +29,8 @@ export default function ClinicSearch({
             Find a clinic near you
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-            Search by city and select the clinic that feels right for you.
+            Search by city, clinic name, or doctor and select the clinic that
+            feels right for you.
           </p>
         </div>
 
@@ -38,12 +39,12 @@ export default function ClinicSearch({
           className="grid gap-4 rounded-3xl border border-rose-100 bg-[linear-gradient(180deg,_#fff9fb_0%,_#ffffff_100%)] p-5 sm:grid-cols-[minmax(0,1fr)_auto]"
         >
           <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
-            Location
+            Search
             <input
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
               className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300 focus:ring-2 focus:ring-rose-100"
-              placeholder="Search by city"
+              placeholder="Search by city, clinic, or doctor"
             />
           </label>
 

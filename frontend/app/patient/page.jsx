@@ -14,6 +14,7 @@ const INITIAL_FORM = {
   email: "",
   phone: "",
   country: "",
+  insuranceType: "",
   insuranceProvider: "",
   insuranceNumber: "",
 };
@@ -48,6 +49,22 @@ function getApiError(data, fallbackMessage) {
   if (typeof data?.detail?.detail === "string") return data.detail.detail;
   if (typeof data?.message === "string") return data.message;
   return fallbackMessage;
+}
+
+function matchesClinicSearch(clinic, term) {
+  const query = term.trim().toLowerCase();
+
+  if (!query) {
+    return true;
+  }
+
+  return [clinic.city, clinic.name, clinic.doctor_name].some((value) =>
+    String(value || "").toLowerCase().includes(query)
+  );
+}
+
+function countPhoneDigits(value) {
+  return String(value || "").replace(/\D/g, "").length;
 }
 
 export default function PatientPage() {
@@ -115,11 +132,18 @@ export default function PatientPage() {
       formData.email,
       formData.phone,
       formData.country,
+      formData.insuranceType,
       formData.insuranceProvider,
       formData.insuranceNumber,
     ];
     if (required.some((value) => !value.trim())) {
       setErrorMessage("Please complete all fields before requesting support.");
+      return;
+    }
+    if (countPhoneDigits(formData.phone) < 8) {
+      setErrorMessage(
+        "Please enter a valid phone number with at least 8 digits."
+      );
       return;
     }
     setIsCreatingCase(true);
@@ -162,10 +186,12 @@ export default function PatientPage() {
     const code = lookupCode.trim().toUpperCase();
     setIsLookingUp(true);
     try {
-      setAccessCode(code);
       setCaseInfo(null);
       await fetchCaseStatus(code);
+      setAccessCode(code);
     } catch (error) {
+      setAccessCode("");
+      setCaseStatus(null);
       setErrorMessage(error.message || "Unable to resume the case.");
     } finally {
       setIsLookingUp(false);
@@ -179,11 +205,10 @@ export default function PatientPage() {
     setSelectedSlotId("");
     setIsLoadingClinics(true);
     try {
-      const query = city.trim() ? `?city=${encodeURIComponent(city.trim())}` : "";
-      const response = await fetch(`${API_BASE_URL}/api/clinics${query}`);
+      const response = await fetch(`${API_BASE_URL}/api/clinics`);
       const data = await response.json();
       if (!response.ok) throw new Error(getApiError(data, "Unable to load clinics."));
-      setClinics(data);
+      setClinics(data.filter((clinic) => matchesClinicSearch(clinic, city)));
     } catch (error) {
       setErrorMessage(error.message || "Unable to load clinics right now.");
     } finally {
@@ -286,11 +311,17 @@ export default function PatientPage() {
             setLookupCode={setLookupCode}
             onSubmit={handleResumeCase}
             isLoading={isLookingUp}
+            errorMessage={errorMessage}
+            onRequestSupport={() => {
+              setErrorMessage("");
+              setLookupCode("");
+              setMode("support");
+            }}
             onBack={() => setMode("selector")}
           />
         ) : null}
 
-        {mode === "support" && !selectedMockClinic ? (
+        {mode === "support" && !selectedMockClinic && !accessCode ? (
           <ClinicSearch
             searchTerm={city}
             setSearchTerm={setCity}
@@ -323,13 +354,13 @@ export default function PatientPage() {
           />
         ) : null}
 
-        {mode !== "support" && errorMessage ? (
+        {mode !== "support" && mode !== "accesscode" && errorMessage ? (
           <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
             {errorMessage}
           </div>
         ) : null}
 
-        {accessCode ? (
+        {accessCode && !caseInfo ? (
           <section className="rounded-3xl border border-white/70 bg-white p-5 shadow-[0_24px_60px_rgba(148,163,184,0.14)] sm:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
@@ -385,7 +416,8 @@ export default function PatientPage() {
                       Find a clinic
                     </h3>
                     <p className="mt-2 text-sm text-slate-500">
-                      Search live clinic availability by city and choose a slot.
+                      Search live clinic availability by city, clinic, or doctor
+                      and choose a slot.
                     </p>
                   </div>
 
@@ -394,7 +426,7 @@ export default function PatientPage() {
                       value={city}
                       onChange={(event) => setCity(event.target.value)}
                       className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300 focus:ring-2 focus:ring-rose-100"
-                      placeholder="Search by city"
+                      placeholder="Search by city, clinic, or doctor"
                     />
                     <button
                       type="submit"

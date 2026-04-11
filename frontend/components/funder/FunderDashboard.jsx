@@ -31,6 +31,25 @@ function DashboardSpinner({ text = "Loading dashboard data..." }) {
   );
 }
 
+function MetricCard({ label, value, subtle = false }) {
+  return (
+    <div
+      className={`rounded-3xl border p-5 ${
+        subtle
+          ? "border-slate-100 bg-white/80"
+          : "border-rose-100 bg-[linear-gradient(180deg,_#fff9fb_0%,_#ffffff_100%)]"
+      }`}
+    >
+      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+        {label}
+      </div>
+      <div className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
+        {value}
+      </div>
+    </div>
+  );
+}
+
 function formatAppointmentStatus(status) {
   if (!status) return "Unknown";
 
@@ -129,81 +148,87 @@ export default function FunderDashboard({
           </div>
         ) : null}
 
-        <section className="grid gap-6 xl:grid-cols-2">
+        <section className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
           <div className="rounded-3xl border border-white/70 bg-white p-6 shadow-[0_20px_50px_rgba(148,163,184,0.12)]">
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold tracking-tight text-slate-900">
-                Funding overview
-              </h2>
-              <p className="mt-1 text-sm text-slate-500">
-                Funding and voucher activity across the network.
-              </p>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              {[
-                ["Total cases", dashboard?.total_cases ?? 0],
-                ["EUR committed", `${dashboard?.total_xrp_locked ?? 0} EUR`],
-                ["EUR released", `${dashboard?.total_xrp_released ?? 0} EUR`],
-                ["Confirmed", confirmedCount],
-              ].map(([label, value]) => (
-                <div
-                  key={label}
-                  className="rounded-3xl border border-slate-100 bg-slate-50 p-5"
-                >
-                  <div className="text-sm font-medium text-slate-500">{label}</div>
-                  <div className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
-                    {value}
-                  </div>
+            <div className="flex flex-col gap-4">
+              <div>
+                <div className="inline-flex rounded-full border border-rose-100 bg-rose-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#993556]">
+                  Funding overview
                 </div>
-              ))}
+                <p className="mt-3 text-sm text-slate-500">
+                  Funding and voucher activity across the network.
+                </p>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <MetricCard
+                  label="Total cases"
+                  value={dashboard?.total_cases ?? 0}
+                />
+                <MetricCard label="Confirmed" value={confirmedCount} />
+                <MetricCard
+                  label="EUR committed"
+                  value={`${dashboard?.total_xrp_locked ?? 0} EUR`}
+                  subtle
+                />
+                <MetricCard
+                  label="EUR released"
+                  value={`${dashboard?.total_xrp_released ?? 0} EUR`}
+                  subtle
+                />
+              </div>
             </div>
           </div>
 
           <div className="rounded-3xl border border-white/70 bg-white p-6 shadow-[0_20px_50px_rgba(148,163,184,0.12)]">
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold tracking-tight text-slate-900">
-                Care operations
-              </h2>
-              <p className="mt-1 text-sm text-slate-500">
-                Live counts from clinics, patient cases, appointments, and proofs.
-              </p>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              {[
-                ["Clinics", dashboard?.total_clinics ?? 0],
-                ["Patient cases", dashboard?.total_patient_cases ?? 0],
-                ["Appointments", dashboard?.total_appointments ?? 0],
-                [
-                  "Completed appointments",
-                  dashboard?.total_completed_appointments ?? 0,
-                ],
-                ["Proofs submitted", dashboard?.total_proofs_submitted ?? 0],
-              ].map(([label, value]) => (
-                <div
-                  key={label}
-                  className="rounded-3xl border border-slate-100 bg-slate-50 p-5"
-                >
-                  <div className="text-sm font-medium text-slate-500">{label}</div>
-                  <div className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
-                    {value}
-                  </div>
+            <div className="flex flex-col gap-4">
+              <div>
+                <div className="inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">
+                  Care operations
                 </div>
-              ))}
+                <p className="mt-3 text-sm text-slate-500">
+                  Live counts from clinics, patient cases, appointments, and proofs.
+                </p>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <MetricCard label="Clinics" value={dashboard?.total_clinics ?? 0} subtle />
+                <MetricCard
+                  label="Patient cases"
+                  value={dashboard?.total_patient_cases ?? 0}
+                  subtle
+                />
+                <MetricCard
+                  label="Appointments"
+                  value={dashboard?.total_appointments ?? 0}
+                  subtle
+                />
+                <MetricCard
+                  label="Completed appointments"
+                  value={dashboard?.total_completed_appointments ?? 0}
+                  subtle
+                />
+                <div className="sm:col-span-2">
+                  <MetricCard
+                    label="Proofs submitted"
+                    value={dashboard?.total_proofs_submitted ?? 0}
+                    subtle
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
         <section className="rounded-3xl border border-white/70 bg-white p-6 shadow-[0_20px_50px_rgba(148,163,184,0.12)]">
-          <div className="flex flex-col gap-4 border-b border-slate-100 pb-6">
+          <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
                 Funding cases
               </h1>
               <p className="text-sm text-slate-500">
-                The current dashboard API does not yet expose patient countries,
-                so cases are grouped under a fallback country label when needed.
+                Create new funding, link it to booked appointments, and then
+                review the active case list below.
               </p>
             </div>
 
@@ -287,31 +312,6 @@ export default function FunderDashboard({
               ) : null}
             </form>
 
-            <div className="flex flex-wrap gap-3">
-              {[
-                ["all", "All"],
-                ["pending", "Pending"],
-                ["confirmed", "Confirmed"],
-                ["released", "Released"],
-              ].map(([value, label]) => {
-                const isActive = statusFilter === value;
-                return (
-                  <button
-                    key={value}
-                    type="button"
-                    onClick={() => setStatusFilter(value)}
-                    className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                      isActive
-                        ? "text-white"
-                        : "border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900"
-                    }`}
-                    style={isActive ? { backgroundColor: BRAND_COLOR } : {}}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
           </div>
 
           <div className="mt-6 flex flex-col gap-6">
@@ -321,8 +321,8 @@ export default function FunderDashboard({
                   Link funding to a clinic appointment
                 </h2>
                 <p className="text-sm text-slate-500">
-                  Use the new clinic admin flow to attach a funding case to a
-                  booked appointment before the clinic confirms care.
+                  Attach an existing funding case to a booked appointment
+                  before the clinic confirms care.
                 </p>
               </div>
 
@@ -478,20 +478,6 @@ export default function FunderDashboard({
                     </select>
                   </label>
 
-                  <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-600">
-                    <div className="font-semibold text-slate-900">
-                      What this does
-                    </div>
-                    <p className="mt-2">
-                      The selected funding case is attached to the chosen
-                      appointment through the backend endpoint{" "}
-                      <span className="font-mono text-xs text-slate-700">
-                        PATCH /api/clinic-admin/appointments/{"{id}"}/link-funding
-                      </span>
-                      .
-                    </p>
-                  </div>
-
                   {linkableFundingCases.length ? null : (
                     <div className="rounded-2xl border border-dashed border-slate-200 px-4 py-6 text-sm text-slate-500">
                       Create a funding case first to link it to an appointment.
@@ -527,6 +513,45 @@ export default function FunderDashboard({
               </form>
             </section>
 
+            <section className="rounded-3xl border border-slate-100 bg-slate-50 p-5">
+              <div className="flex flex-col gap-4 border-b border-slate-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold tracking-tight text-slate-900">
+                    Case list
+                  </h2>
+                  <p className="mt-1 text-sm text-slate-500">
+                    Filter and review funding cases across the network.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  {[
+                    ["all", "All"],
+                    ["pending", "Pending"],
+                    ["confirmed", "Confirmed"],
+                    ["released", "Released"],
+                  ].map(([value, label]) => {
+                    const isActive = statusFilter === value;
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        onClick={() => setStatusFilter(value)}
+                        className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                          isActive
+                            ? "text-white"
+                            : "border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                        }`}
+                        style={isActive ? { backgroundColor: BRAND_COLOR } : {}}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-5 flex flex-col gap-6">
             {groupedCases.length ? (
               groupedCases.map(([country, cases]) => (
                 <div key={country} className="rounded-3xl border border-slate-100">
@@ -663,6 +688,8 @@ export default function FunderDashboard({
                 No funding cases match this filter yet.
               </div>
             )}
+              </div>
+            </section>
           </div>
         </section>
       </div>

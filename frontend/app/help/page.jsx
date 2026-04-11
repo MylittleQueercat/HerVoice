@@ -30,8 +30,7 @@ export default function HelpPage() {
                   support@hervoice-demo.org
                 </div>
                 <p className="mt-3 text-sm leading-6 text-slate-600">
-                  For login questions, voucher issues, clinic matching, or funding
-                  support.
+                  For login questions, voucher issues, clinic matching, or funding support.
                 </p>
               </div>
 
@@ -39,9 +38,7 @@ export default function HelpPage() {
                 <div className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Phone
                 </div>
-                <div className="mt-3 text-lg font-semibold text-slate-900">
-                  +49 30 0000 1234
-                </div>
+                <div className="mt-3 text-lg font-semibold text-slate-900">+33 30 0000 1234</div>
                 <p className="mt-3 text-sm leading-6 text-slate-600">
                   Available Monday to Friday, 9:00 to 17:00 CET.
                 </p>
@@ -49,9 +46,8 @@ export default function HelpPage() {
             </div>
 
             <div className="rounded-3xl border border-dashed border-slate-200 px-6 py-5 text-sm leading-6 text-slate-600">
-              Your privacy matters. We will never share your personal
-              information. All communication is handled with full
-              confidentiality.
+              Your privacy matters. We will never share your personal information. All communication
+              is handled with full confidentiality.
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
