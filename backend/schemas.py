@@ -72,7 +72,14 @@ class DashboardResponse(BaseModel):
     total_cases: int
     total_xrp_locked: int
     total_xrp_released: int
-    cases: list[DashboardCase]
+
+    total_clinics: int
+    total_patient_cases: int
+    total_appointments: int
+    total_completed_appointments: int
+    total_proofs_submitted: int
+
+    cases: List[DashboardCase]
     
 # --- Clinic schemas ---
 
@@ -170,3 +177,7 @@ class SubmitProofResponse(BaseModel):
     appointment_id: str
     escrow_tx_hash: Optional[str]
     message: str
+    
+class ErrorResponse(BaseModel):
+    error: str
+    detail: str
