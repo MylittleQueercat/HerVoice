@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import BrandLogo from "../components/BrandLogo";
 
 const PORTALS = [
   {
@@ -32,13 +32,7 @@ export default function HomePage() {
         <section className="overflow-hidden rounded-[2rem] border border-white/70 bg-white/85 px-6 py-10 shadow-[0_24px_60px_rgba(148,163,184,0.14)] backdrop-blur sm:px-10 sm:py-14">
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-5">
-              <Image
-                src="/hervoice_logo.svg"
-                alt="HerVoice"
-                width={160}
-                height={44}
-                priority
-              />
+              <BrandLogo size="lg" />
               <div className="max-w-3xl">
                 <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
                   Safe, confidential funding for women seeking care across borders.

@@ -1,37 +1,8 @@
 "use client";
 
-const BRAND_COLOR = "#993556";
+import BrandLogo from "../BrandLogo";
 
-function HerVoiceLogo() {
-  return (
-    <div className="flex items-center gap-3">
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 24 24"
-        className="h-5 w-5"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M12 20.2s-6.95-4.32-8.97-8.44C1.6 8.84 3.12 5.5 6.3 4.63c2.04-.56 4.14.18 5.7 1.98 1.56-1.8 3.66-2.54 5.7-1.98 3.18.87 4.7 4.21 3.27 7.13C18.95 15.88 12 20.2 12 20.2Z"
-          fill={BRAND_COLOR}
-          fillOpacity="0.15"
-          stroke={BRAND_COLOR}
-          strokeWidth="1.5"
-        />
-        <path
-          d="M12 8.2v4.1M9.95 10.25h4.1"
-          stroke={BRAND_COLOR}
-          strokeLinecap="round"
-          strokeWidth="1.6"
-        />
-      </svg>
-      <span className="text-lg font-semibold tracking-tight text-slate-900">
-        HerVoice
-      </span>
-    </div>
-  );
-}
+const BRAND_COLOR = "#993556";
 
 function getStatusClasses(status) {
   if (status === "released") {
@@ -124,7 +95,7 @@ export default function FunderDashboard({
     <main className="min-h-screen bg-[linear-gradient(180deg,_#fff8fa_0%,_#f8fafc_48%,_#ffffff_100%)]">
       <header className="border-b border-white/70 bg-white/85 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
-          <HerVoiceLogo />
+          <BrandLogo />
           <div className="flex items-center gap-4">
             <div className="text-right">
               <div className="text-sm font-semibold text-slate-900">
