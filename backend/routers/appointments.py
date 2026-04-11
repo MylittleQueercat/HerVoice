@@ -14,7 +14,13 @@ def book(request: BookAppointmentRequest, db: Session = Depends(get_db)):
     try:
         appointment = book_appointment(request.access_code, request.slot_id, db)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "BOOK_APPOINTMENT_FAILED",
+                "detail": str(e),
+            },
+        )
 
     slot = db.query(ClinicSlot).filter(ClinicSlot.id == appointment.clinic_slot_id).first()
     clinic = slot.clinic
@@ -47,7 +53,13 @@ def update(appointment_id: str, request: UpdateAppointmentRequest, db: Session =
         else:
             raise ValueError("action must be 'cancel' or 'reschedule'")
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "UPDATE_APPOINTMENT_FAILED",
+                "detail": str(e),
+            },
+        )
 
     slot = db.query(ClinicSlot).filter(ClinicSlot.id == appointment.clinic_slot_id).first()
     clinic = slot.clinic

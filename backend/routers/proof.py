@@ -8,6 +8,8 @@ from schemas import SubmitProofResponse
 from services.appointment_service import submit_completion_proof
 
 UPLOAD_DIR = "uploads"
+MAX_PDF_SIZE = 5 * 1024 * 1024  # 5 MB
+
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 router = APIRouter(prefix="/api/proof", tags=["proof"])
@@ -26,17 +28,50 @@ def submit_proof(
 
     This endpoint uses multipart/form-data (not JSON) because it accepts an optional PDF file.
 
-    If appointment has a linked funding_case, triggers EscrowFinish automatically.
-    Expected latency if escrow release is triggered: 5-15 seconds.
-
-    pdf: optional. If provided, saved to uploads/ directory. Not parsed in MVP.
+    pdf: optional. If provided, it must be a PDF and smaller than 5 MB.
     """
     pdf_filename = None
+
     if pdf:
-        safe_filename = f"{appointment_id}_{pdf.filename}"
+        original_name = pdf.filename or ""
+
+        if not original_name.lower().endswith(".pdf"):
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": "INVALID_PROOF_FILE",
+                    "detail": "Only PDF files are allowed.",
+                },
+            )
+
+        if pdf.content_type != "application/pdf":
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": "INVALID_PROOF_FILE",
+                    "detail": "Uploaded file must have content type application/pdf.",
+                },
+            )
+
+        file_bytes = pdf.file.read()
+        file_size = len(file_bytes)
+
+        if file_size > MAX_PDF_SIZE:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": "PROOF_FILE_TOO_LARGE",
+                    "detail": "PDF file must be smaller than 5 MB.",
+                },
+            )
+
+        safe_original_name = os.path.basename(original_name)
+        safe_filename = f"{appointment_id}_{safe_original_name}"
         file_path = os.path.join(UPLOAD_DIR, safe_filename)
+
         with open(file_path, "wb") as f:
-            shutil.copyfileobj(pdf.file, f)
+            f.write(file_bytes)
+
         pdf_filename = safe_filename
 
     try:
@@ -48,7 +83,13 @@ def submit_proof(
             db=db,
         )
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "SUBMIT_PROOF_FAILED",
+                "detail": str(e),
+            },
+        )
 
     message = "Proof submitted."
     if proof.escrow_tx_hash:
