@@ -9,7 +9,23 @@ router = APIRouter(prefix="/api/clinic-admin", tags=["clinic-admin"])
 
 @router.post("/register", response_model=ClinicResponse)
 def register_clinic(request: ClinicRegisterRequest, db: Session = Depends(get_db)):
-    """Register a new clinic. No verification in MVP."""
+    """Register a new clinic. Basic duplicate prevention for demo."""
+    existing = db.query(Clinic).filter(
+        Clinic.name == request.name,
+        Clinic.doctor_name == request.doctor_name,
+        Clinic.address == request.address,
+        Clinic.city == request.city,
+    ).first()
+
+    if existing:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "CLINIC_ALREADY_EXISTS",
+                "detail": "A clinic with the same name, doctor, address, and city already exists.",
+            },
+        )
+
     clinic = Clinic(
         name=request.name,
         doctor_name=request.doctor_name,

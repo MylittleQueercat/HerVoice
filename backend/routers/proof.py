@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from database import get_db
 from schemas import SubmitProofResponse
 from services.appointment_service import submit_completion_proof
+from models import CompletionProof, Voucher, CareStatus
+from services.voucher_service import confirm_service_and_release
 
 UPLOAD_DIR = "uploads"
 MAX_PDF_SIZE = 5 * 1024 * 1024  # 5 MB
@@ -101,3 +103,102 @@ def submit_proof(
         escrow_tx_hash=proof.escrow_tx_hash,
         message=message,
     )
+    
+@router.post("/{proof_id}/retry-payout")
+def retry_payout(proof_id: str, db: Session = Depends(get_db)):
+    """
+    Retry payout for a proof that was submitted successfully
+    but did not complete XRPL release automatically.
+
+    Success path:
+    - proof exists
+    - appointment has linked funding_case_id
+    - funding_case has an unused voucher
+    - confirm_service_and_release succeeds
+
+    On success:
+    - proof.escrow_tx_hash is updated
+    - patient_case.care_status becomes PAYMENT_RELEASED
+    """
+    proof = db.query(CompletionProof).filter(CompletionProof.id == proof_id).first()
+    if not proof:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": "PROOF_NOT_FOUND",
+                "detail": "Proof not found.",
+            },
+        )
+
+    if proof.escrow_tx_hash:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "PAYOUT_ALREADY_COMPLETED",
+                "detail": "This proof already has a payout transaction hash.",
+            },
+        )
+
+    appointment = proof.appointment
+    if not appointment:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "APPOINTMENT_NOT_FOUND",
+                "detail": "This proof is not linked to a valid appointment.",
+            },
+        )
+
+    if not appointment.funding_case_id:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "FUNDING_NOT_LINKED",
+                "detail": "This appointment is not linked to any funding case.",
+            },
+        )
+
+    voucher = db.query(Voucher).filter(
+        Voucher.funding_case_id == appointment.funding_case_id
+    ).first()
+
+    if not voucher:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": "VOUCHER_NOT_FOUND",
+                "detail": "No voucher found for the linked funding case.",
+            },
+        )
+
+    try:
+        result = confirm_service_and_release(voucher.id, db)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "RETRY_PAYOUT_FAILED",
+                "detail": str(e),
+            },
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "RETRY_PAYOUT_FAILED",
+                "detail": str(e),
+            },
+        )
+
+    proof.escrow_tx_hash = result["tx_hash"]
+    if appointment.patient_case:
+        appointment.patient_case.care_status = CareStatus.PAYMENT_RELEASED
+    db.commit()
+    db.refresh(proof)
+
+    return {
+        "proof_id": proof.id,
+        "appointment_id": proof.appointment_id,
+        "escrow_tx_hash": proof.escrow_tx_hash,
+        "message": "Payout retried successfully.",
+    }
