@@ -26,8 +26,10 @@ export default function StepSelector({ onSelect }) {
             How would you like to continue?
           </h1>
           <p className="mt-3 text-base leading-7 text-slate-600">
-            Choose the path that matches your situation. You can continue with an
-            existing access code or start a new support request.
+            Choose the path that matches your situation.
+            <br />
+            You can continue with an existing access code or start a new support
+            request.
           </p>
         </div>
 
@@ -41,12 +43,7 @@ export default function StepSelector({ onSelect }) {
             >
               <div className="flex h-full flex-col justify-between gap-8">
                 <div>
-                  <div
-                    className="inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white"
-                    style={{ backgroundColor: BRAND_COLOR }}
-                  >
-                    Continue
-                  </div>
+                  <div className="h-[30px]" aria-hidden="true" />
                   <h2 className="mt-4 text-2xl font-semibold tracking-tight text-slate-900">
                     {option.title}
                   </h2>
@@ -62,7 +59,6 @@ export default function StepSelector({ onSelect }) {
                   Choose this option
                   <span className="transition group-hover:translate-x-1">→</span>
                 </div>
-
               </div>
             </button>
           ))}

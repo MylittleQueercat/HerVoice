@@ -33,11 +33,11 @@ export default function HomePage() {
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-5">
               <BrandLogo size="lg" />
-              <div className="max-w-3xl">
+              <div>
                 <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
                   Safe, confidential funding for women seeking care across borders.
                 </h1>
-                <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+                <p className="mt-4 text-base leading-7 text-slate-600 sm:text-lg">
                   HerVoice connects patients, trusted funding partners, and
                   verified clinics through a calm, privacy-first digital flow.
                 </p>
