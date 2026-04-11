@@ -327,35 +327,98 @@ export default function FunderPage() {
           </div>
         ) : null}
 
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {[
-            {
-              label: "Total cases",
-              value: dashboard?.total_cases ?? 0,
-            },
-            {
-              label: "XRP locked",
-              value: `${dashboard?.total_xrp_locked ?? 0} XRP`,
-            },
-            {
-              label: "XRP released",
-              value: `${dashboard?.total_xrp_released ?? 0} XRP`,
-            },
-            {
-              label: "Confirmed",
-              value: confirmedCount,
-            },
-          ].map((card) => (
-            <div
-              key={card.label}
-              className="rounded-3xl border border-white/70 bg-white p-5 shadow-[0_20px_50px_rgba(148,163,184,0.12)]"
-            >
-              <div className="text-sm font-medium text-slate-500">{card.label}</div>
-              <div className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
-                {card.value}
-              </div>
+        <section className="grid gap-6 xl:grid-cols-2">
+          <div className="rounded-3xl border border-white/70 bg-white p-6 shadow-[0_20px_50px_rgba(148,163,184,0.12)]">
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold tracking-tight text-slate-900">
+                Funding overview
+              </h2>
+              <p className="mt-1 text-sm text-slate-500">
+                XRPL funding and voucher activity across the network.
+              </p>
             </div>
-          ))}
+
+            <div className="grid gap-4 md:grid-cols-2">
+              {[
+                {
+                  label: "Total cases",
+                  value: dashboard?.total_cases ?? 0,
+                },
+                {
+                  label: "XRP locked",
+                  value: `${dashboard?.total_xrp_locked ?? 0} XRP`,
+                },
+                {
+                  label: "XRP released",
+                  value: `${dashboard?.total_xrp_released ?? 0} XRP`,
+                },
+                {
+                  label: "Confirmed",
+                  value: confirmedCount,
+                },
+              ].map((card) => (
+                <div
+                  key={card.label}
+                  className="rounded-3xl border border-slate-100 bg-slate-50 p-5"
+                >
+                  <div className="text-sm font-medium text-slate-500">
+                    {card.label}
+                  </div>
+                  <div className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
+                    {card.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-white/70 bg-white p-6 shadow-[0_20px_50px_rgba(148,163,184,0.12)]">
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold tracking-tight text-slate-900">
+                Care operations
+              </h2>
+              <p className="mt-1 text-sm text-slate-500">
+                Live counts from clinics, patient cases, appointments, and proofs.
+              </p>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              {[
+                {
+                  label: "Clinics",
+                  value: dashboard?.total_clinics ?? 0,
+                },
+                {
+                  label: "Patient cases",
+                  value: dashboard?.total_patient_cases ?? 0,
+                },
+                {
+                  label: "Appointments",
+                  value: dashboard?.total_appointments ?? 0,
+                },
+                {
+                  label: "Completed appointments",
+                  value: dashboard?.total_completed_appointments ?? 0,
+                },
+                {
+                  label: "Proofs submitted",
+                  value: dashboard?.total_proofs_submitted ?? 0,
+                },
+              ].map((card) => (
+                <div
+                  key={card.label}
+                  className="rounded-3xl border border-slate-100 bg-slate-50 p-5"
+                >
+                  <div className="text-sm font-medium text-slate-500">
+                    {card.label}
+                  </div>
+                  <div className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
+                    {card.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
         <section className="rounded-3xl border border-white/70 bg-white p-6 shadow-[0_20px_50px_rgba(148,163,184,0.12)]">

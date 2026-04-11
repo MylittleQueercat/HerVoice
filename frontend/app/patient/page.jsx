@@ -138,6 +138,13 @@ function formatStatus(value) {
     .join(" ");
 }
 
+function getApiError(data, fallbackMessage) {
+  if (typeof data?.detail === "string") return data.detail;
+  if (typeof data?.detail?.detail === "string") return data.detail.detail;
+  if (typeof data?.message === "string") return data.message;
+  return fallbackMessage;
+}
+
 export default function PatientPage() {
   const [formData, setFormData] = useState(INITIAL_FORM);
   const [lookupCode, setLookupCode] = useState("");
@@ -172,7 +179,7 @@ export default function PatientPage() {
       `${API_BASE_URL}/api/cases/status?access_code=${encodeURIComponent(code)}`
     );
     const data = await response.json();
-    if (!response.ok) throw new Error(data.detail || "Unable to load case status.");
+    if (!response.ok) throw new Error(getApiError(data, "Unable to load case status."));
     setCaseStatus(data);
     return data;
   }
@@ -206,7 +213,7 @@ export default function PatientPage() {
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.detail || data.message || "Unable to create case.");
+        throw new Error(getApiError(data, "Unable to create case."));
       }
       setCaseInfo(data);
       setAccessCode(data.access_code);
@@ -253,7 +260,7 @@ export default function PatientPage() {
       const query = city.trim() ? `?city=${encodeURIComponent(city.trim())}` : "";
       const response = await fetch(`${API_BASE_URL}/api/clinics${query}`);
       const data = await response.json();
-      if (!response.ok) throw new Error(data.detail || "Unable to load clinics.");
+      if (!response.ok) throw new Error(getApiError(data, "Unable to load clinics."));
       setClinics(data);
     } catch (error) {
       setErrorMessage(error.message || "Unable to load clinics right now.");
@@ -270,7 +277,7 @@ export default function PatientPage() {
       const response = await fetch(`${API_BASE_URL}/api/clinics/${clinicId}`);
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.detail || "Unable to load clinic details.");
+        throw new Error(getApiError(data, "Unable to load clinic details."));
       }
       setSelectedClinic(data);
     } catch (error) {
@@ -298,7 +305,7 @@ export default function PatientPage() {
         body: JSON.stringify({ access_code: accessCode, slot_id: selectedSlotId }),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.detail || data.message || "Unable to book slot.");
+      if (!response.ok) throw new Error(getApiError(data, "Unable to book slot."));
       await fetchCaseStatus(accessCode);
       if (selectedClinic?.id) await handleSelectClinic(selectedClinic.id);
     } catch (error) {
@@ -322,7 +329,7 @@ export default function PatientPage() {
         }
       );
       const data = await response.json();
-      if (!response.ok) throw new Error(data.detail || data.message || "Unable to cancel.");
+      if (!response.ok) throw new Error(getApiError(data, "Unable to cancel."));
       await fetchCaseStatus(accessCode);
       if (selectedClinic?.id) await handleSelectClinic(selectedClinic.id);
     } catch (error) {
