@@ -21,6 +21,16 @@ from services.xrpl_service import (
     get_funder_wallet,
 )
 
+
+def generate_access_code(db: Session, length: int = 8) -> str:
+    alphabet = string.ascii_uppercase + string.digits
+
+    while True:
+        candidate = "".join(random.choices(alphabet, k=length))
+        exists = db.query(FundingCase).filter(FundingCase.access_code == candidate).first()
+        if not exists:
+            return candidate
+
 # --------------------
 # Clinic / Slot
 # --------------------
@@ -116,17 +126,18 @@ def create_case_with_appointment(
         raise ValueError(f"Slot is not available (status: {slot.status})")
 
     amount_drops = amount_xrp * 1_000_000
+    access_code = generate_access_code(db)
 
     case = FundingCase(
-		patient_hash=patient_hash,
-		access_code=access_code,
-		email=email,
-		country=country,
-		clinic_address=slot.clinic.xrpl_wallet_address or "",
-		amount_xrp=amount_xrp,
-		amount_drops=amount_drops,
-		status=CaseStatus.PENDING,
-	)
+        patient_hash=patient_hash,
+        access_code=access_code,
+        email=email,
+        country=country,
+        clinic_address=slot.clinic.xrpl_wallet_address or "",
+        amount_xrp=amount_xrp,
+        amount_drops=amount_drops,
+        status=CaseStatus.PENDING,
+    )
     db.add(case)
     db.flush()
 

@@ -23,6 +23,11 @@ const INITIAL_FORM = {
 
 function getApiError(data, fallbackMessage) {
   if (typeof data?.detail === "string") return data.detail;
+  if (Array.isArray(data?.detail) && data.detail.length) {
+    return data.detail
+      .map((item) => item?.msg || item?.message || String(item))
+      .join(" ");
+  }
   if (typeof data?.detail?.detail === "string") return data.detail.detail;
   if (typeof data?.message === "string") return data.message;
   return fallbackMessage;
@@ -139,6 +144,8 @@ export default function PatientPage() {
             date_of_birth: formData.birthDate,
             insurance_number: formData.insuranceNumber.trim(),
           },
+          email: formData.email.trim(),
+          country: formData.country,
           slot_id: selectedSlotId,
           amount_xrp: DEFAULT_SUPPORT_AMOUNT_EUR,
         }),
