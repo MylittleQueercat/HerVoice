@@ -1,67 +1,56 @@
 from pydantic import BaseModel, Field
-from typing import Optional, List, Dict, Any
+from typing import Optional
 from datetime import datetime
-from models import CaseStatus, VoucherStatus, SlotStatus, AppointmentStatus, CareStatus
+from models import CaseStatus
 
 
-# --- Request bodies ---
+class PatientIdentity(BaseModel):
+    name: str
+    date_of_birth: str
+    insurance_number: str
+
+
+class CreateCaseRequest(BaseModel):
+    patient_identity: PatientIdentity
+    amount_xrp: int = Field(..., ge=1, le=1000, description="Amount of funding needed in XRP")
+
+
+class CreateCaseResponse(BaseModel):
+    case_id: str
+    amount_xrp: int
+    status: CaseStatus
+    message: str
+
 
 class CreateFundRequest(BaseModel):
-    amount_xrp: int = Field(..., ge=1, le=1000, description="Amount in XRP, minimum 1, maximum 1000")
+    case_id: str
 
-
-class VerifyVoucherRequest(BaseModel):
-    voucher_id: str
-
-
-class ConfirmServiceRequest(BaseModel):
-    voucher_id: str
-
-
-# --- Response bodies ---
 
 class CreateFundResponse(BaseModel):
     case_id: str
-    voucher_id: str
     amount_xrp: int
     escrow_tx_hash: str
     status: CaseStatus
     message: str
 
 
-class VoucherStatusResponse(BaseModel):
-    voucher_id: str
-    status: VoucherStatus
-    funding_case_id: str
-    amount_xrp: int
-    case_status: CaseStatus
-    created_at: datetime
-    redeemed_at: Optional[datetime]
+class VerifyAndReleaseRequest(BaseModel):
+    patient_identity: PatientIdentity
 
 
-class VerifyVoucherResponse(BaseModel):
-    voucher_id: str
-    valid: bool
-    status: Optional[VoucherStatus]
+class VerifyAndReleaseResponse(BaseModel):
+    matched: bool
+    case_id: Optional[str]
+    tx_hash: Optional[str]
     amount_xrp: Optional[int]
-    message: str
-
-
-class ConfirmServiceResponse(BaseModel):
-    voucher_id: str
-    case_id: str
-    tx_hash: str
-    amount_xrp: int
-    clinic_address: str
     message: str
 
 
 class DashboardCase(BaseModel):
     case_id: str
-    voucher_id: Optional[str]
+    patient_hash: str
     amount_xrp: int
-    case_status: CaseStatus
-    voucher_status: Optional[VoucherStatus]
+    status: CaseStatus
     tx_hash_create: Optional[str]
     tx_hash_finish: Optional[str]
     created_at: datetime
@@ -72,112 +61,188 @@ class DashboardResponse(BaseModel):
     total_cases: int
     total_xrp_locked: int
     total_xrp_released: int
+    cases: list[DashboardCase]
 
-    total_clinics: int
-    total_patient_cases: int
-    total_appointments: int
-    total_completed_appointments: int
-    total_proofs_submitted: int
+# from pydantic import BaseModel, Field
+# from typing import Optional, List, Dict, Any
+# from datetime import datetime
+# from models import CaseStatus, VoucherStatus, SlotStatus, AppointmentStatus, CareStatus
 
-    cases: List[DashboardCase]
+
+# # --- Request bodies ---
+
+# class CreateFundRequest(BaseModel):
+#     amount_xrp: int = Field(..., ge=1, le=1000, description="Amount in XRP, minimum 1, maximum 1000")
+
+
+# class VerifyVoucherRequest(BaseModel):
+#     voucher_id: str
+
+
+# class ConfirmServiceRequest(BaseModel):
+#     voucher_id: str
+
+
+# # --- Response bodies ---
+
+# class CreateFundResponse(BaseModel):
+#     case_id: str
+#     voucher_id: str
+#     amount_xrp: int
+#     escrow_tx_hash: str
+#     status: CaseStatus
+#     message: str
+
+
+# class VoucherStatusResponse(BaseModel):
+#     voucher_id: str
+#     status: VoucherStatus
+#     funding_case_id: str
+#     amount_xrp: int
+#     case_status: CaseStatus
+#     created_at: datetime
+#     redeemed_at: Optional[datetime]
+
+
+# class VerifyVoucherResponse(BaseModel):
+#     voucher_id: str
+#     valid: bool
+#     status: Optional[VoucherStatus]
+#     amount_xrp: Optional[int]
+#     message: str
+
+
+# class ConfirmServiceResponse(BaseModel):
+#     voucher_id: str
+#     case_id: str
+#     tx_hash: str
+#     amount_xrp: int
+#     clinic_address: str
+#     message: str
+
+
+# class DashboardCase(BaseModel):
+#     case_id: str
+#     voucher_id: Optional[str]
+#     amount_xrp: int
+#     case_status: CaseStatus
+#     voucher_status: Optional[VoucherStatus]
+#     tx_hash_create: Optional[str]
+#     tx_hash_finish: Optional[str]
+#     created_at: datetime
+#     released_at: Optional[datetime]
+
+
+# class DashboardResponse(BaseModel):
+#     total_cases: int
+#     total_xrp_locked: int
+#     total_xrp_released: int
+
+#     total_clinics: int
+#     total_patient_cases: int
+#     total_appointments: int
+#     total_completed_appointments: int
+#     total_proofs_submitted: int
+
+#     cases: List[DashboardCase]
     
-# --- Clinic schemas ---
+# # --- Clinic schemas ---
 
-class ClinicRegisterRequest(BaseModel):
-    name: str
-    doctor_name: str
-    address: str
-    city: str
-    xrpl_wallet_address: Optional[str] = None
-
-
-class ClinicResponse(BaseModel):
-    id: str
-    name: str
-    doctor_name: str
-    address: str
-    city: str
-    created_at: datetime
+# class ClinicRegisterRequest(BaseModel):
+#     name: str
+#     doctor_name: str
+#     address: str
+#     city: str
+#     xrpl_wallet_address: Optional[str] = None
 
 
-class SlotCreateRequest(BaseModel):
-    slot_datetime: datetime   # ISO 8601, UTC
+# class ClinicResponse(BaseModel):
+#     id: str
+#     name: str
+#     doctor_name: str
+#     address: str
+#     city: str
+#     created_at: datetime
 
 
-class SlotResponse(BaseModel):
-    id: str
-    clinic_id: str
-    slot_datetime: datetime
-    status: SlotStatus
+# class SlotCreateRequest(BaseModel):
+#     slot_datetime: datetime   # ISO 8601, UTC
 
 
-class ClinicWithSlotsResponse(BaseModel):
-    id: str
-    name: str
-    doctor_name: str
-    address: str
-    city: str
-    available_slots: List[SlotResponse]
+# class SlotResponse(BaseModel):
+#     id: str
+#     clinic_id: str
+#     slot_datetime: datetime
+#     status: SlotStatus
 
 
-# --- Patient case schemas ---
-
-class CreatePatientCaseRequest(BaseModel):
-    email: str
-    phone: Optional[str] = None
-    country_of_origin: str
-
-
-class CreatePatientCaseResponse(BaseModel):
-    case_id: str
-    access_code: str   # shown to user once — they use this to look up their case
-    care_status: CareStatus
-    message: str
+# class ClinicWithSlotsResponse(BaseModel):
+#     id: str
+#     name: str
+#     doctor_name: str
+#     address: str
+#     city: str
+#     available_slots: List[SlotResponse]
 
 
-class PatientCaseStatusResponse(BaseModel):
-    case_id: str
-    care_status: CareStatus
-    appointment: Optional[Dict[str, Any]]   # simplified appointment info, None if not booked
+# # --- Patient case schemas ---
+
+# class CreatePatientCaseRequest(BaseModel):
+#     email: str
+#     phone: Optional[str] = None
+#     country_of_origin: str
 
 
-# --- Appointment schemas ---
-
-class BookAppointmentRequest(BaseModel):
-    access_code: str    # patient uses this instead of auth
-    slot_id: str
-
-
-class AppointmentResponse(BaseModel):
-    id: str
-    patient_case_id: str
-    slot_id: str
-    clinic_name: str
-    slot_datetime: datetime
-    status: AppointmentStatus
-    created_at: datetime
+# class CreatePatientCaseResponse(BaseModel):
+#     case_id: str
+#     access_code: str   # shown to user once — they use this to look up their case
+#     care_status: CareStatus
+#     message: str
 
 
-class UpdateAppointmentRequest(BaseModel):
-    access_code: str
-    action: str   # "reschedule" | "cancel"
-    new_slot_id: Optional[str] = None   # required if action == "reschedule"
+# class PatientCaseStatusResponse(BaseModel):
+#     case_id: str
+#     care_status: CareStatus
+#     appointment: Optional[Dict[str, Any]]   # simplified appointment info, None if not booked
 
 
-# --- Proof schemas ---
+# # --- Appointment schemas ---
 
-class SubmitProofRequest(BaseModel):
-    appointment_id: str
-    rpps_invoice_number: str
-    total_cost_eur: int   # in EUR cents
+# class BookAppointmentRequest(BaseModel):
+#     access_code: str    # patient uses this instead of auth
+#     slot_id: str
 
 
-class SubmitProofResponse(BaseModel):
-    proof_id: str
-    appointment_id: str
-    escrow_tx_hash: Optional[str]
-    message: str
+# class AppointmentResponse(BaseModel):
+#     id: str
+#     patient_case_id: str
+#     slot_id: str
+#     clinic_name: str
+#     slot_datetime: datetime
+#     status: AppointmentStatus
+#     created_at: datetime
+
+
+# class UpdateAppointmentRequest(BaseModel):
+#     access_code: str
+#     action: str   # "reschedule" | "cancel"
+#     new_slot_id: Optional[str] = None   # required if action == "reschedule"
+
+
+# # --- Proof schemas ---
+
+# class SubmitProofRequest(BaseModel):
+#     appointment_id: str
+#     rpps_invoice_number: str
+#     total_cost_eur: int   # in EUR cents
+
+
+# class SubmitProofResponse(BaseModel):
+#     proof_id: str
+#     appointment_id: str
+#     escrow_tx_hash: Optional[str]
+#     message: str
     
-class ErrorResponse(BaseModel):
-    error: str
-    detail: str
+# class ErrorResponse(BaseModel):
+#     error: str
+#     detail: str
