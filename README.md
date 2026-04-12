@@ -112,11 +112,11 @@ No manual approval. No PDF upload. No staff verification. The patient's own re-e
 
 ## Judging Criteria
 
-### Innovation
+### What's Different
 
 Most privacy-preserving health funding systems either expose patient identity or require complex DID infrastructure. HerVoice takes a different approach: instead of storing identity and protecting it, it **never stores it at all**. The patient hash model means the database contains nothing that could identify a patient, even under compulsion. The XRPL Memo field carries an immutable, auditable anchor without leaking anything.
 
-### Execution
+### What's Working
 
 The full end-to-end flow is live and testable:
 
@@ -127,13 +127,13 @@ The full end-to-end flow is live and testable:
 
 Blockchain connectivity is provided by [QuickNode](https://www.quicknode.com), giving us a reliable WebSocket endpoint to XRPL Testnet for stable transaction submission throughout the demo.
 
-### Impact
+### Why It Matters
 
 Cross-border abortion access is a documented, growing challenge in Europe. Poland, Malta, Hungary, and others have near-total restrictions. France has become a destination country. The financial coordination layer for this movement is currently informal and fragile. HerVoice builds the infrastructure that makes it trustworthy — on a public, auditable ledger, without creating a database of patient identities that could be subpoenaed, hacked, or misused.
 
 The same funding rail generalises to any cross-border healthcare scenario where identity-verified, privacy-preserving payout is needed.
 
-### Pitch
+### What We Claim and What We Don't
 
 The core claim is narrow and defensible: **funds are released only when this specific person arrives at this specific clinic**. We do not claim to verify that surgery was completed — that requires RPPS API integration and is on the v2 roadmap. We claim what the system actually does, and the on-chain record proves it.
 
