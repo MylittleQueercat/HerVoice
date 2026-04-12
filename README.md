@@ -394,7 +394,7 @@ The current MVP is intentionally opinionated:
 
 <br/>
 
-_Built with care at Hack the Block · Paris 2026_
+_Built with care at Hack the BlockChain · Paris 2026_
 
 <br/>
 
