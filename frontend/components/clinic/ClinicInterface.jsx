@@ -95,10 +95,10 @@ export default function ClinicInterface({
                 Clinic operations
               </div>
               <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-                Review vouchers and release care payments with confidence
+                Review reservations and release care payments with confidence
               </h1>
               <p className="text-sm text-slate-500">
-                Verify voucher details, confirm completed care, and keep track of
+                Verify reservation details, confirm completed care, and keep track of
                 incoming requests in one calm workflow.
               </p>
             </div>
@@ -147,28 +147,28 @@ export default function ClinicInterface({
                 Verification workspace
               </div>
               <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-                Voucher verification
+                Reservation verification
               </h1>
               <p className="mt-2 text-sm text-slate-500">
-                Verify the voucher before confirming that care has been provided.
+                Verify the reservation before confirming that care has been provided.
               </p>
             </div>
 
             <div className="rounded-3xl border border-slate-100 bg-white">
               <form onSubmit={onVerify} className="flex flex-col gap-4 p-5">
                 <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
-                  Voucher ID
+                  Reservation ID
                   <input
                     value={voucherId}
                     onChange={(event) => setVoucherId(event.target.value)}
                     className="rounded-2xl border border-slate-200 px-4 py-3 font-mono text-sm text-slate-900 outline-none transition focus:border-rose-300 focus:ring-2 focus:ring-rose-100"
-                    placeholder="Paste voucher ID"
+                    placeholder="Paste reservation ID"
                   />
                 </label>
 
                 <div className="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                  Select a request on the right to fill the voucher automatically,
-                  or paste a voucher ID manually.
+                  Select a request on the right to fill the reservation ID automatically,
+                  or paste a reservation ID manually.
                 </div>
 
                 <div className="flex flex-col gap-3 sm:flex-row">
@@ -197,7 +197,7 @@ export default function ClinicInterface({
               </form>
             </div>
 
-            {isVerifying ? <Spinner text="Checking voucher..." /> : null}
+            {isVerifying ? <Spinner text="Checking reservation..." /> : null}
             {isConfirming ? <Spinner text="Waiting for XRPL confirmation..." /> : null}
 
             {actionError ? (
@@ -226,7 +226,7 @@ export default function ClinicInterface({
                 <div className="grid gap-4 text-sm sm:grid-cols-2">
                   <div>
                     <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                      Voucher ID
+                      Reservation ID
                     </div>
                     <div className="mt-2 break-all font-mono text-slate-900">
                       {verification.voucher_id}
@@ -273,7 +273,7 @@ export default function ClinicInterface({
                 <div className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
                   <div>
                     <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-                      Voucher ID
+                      Reservation ID
                     </div>
                     <div className="mt-2 break-all font-mono text-emerald-900">
                       {confirmResult.voucher_id}
@@ -308,7 +308,7 @@ export default function ClinicInterface({
                 Incoming requests
               </h2>
               <p className="mt-2 text-sm text-slate-500">
-                Select a request to prefill the voucher field and continue the
+                Select a request to prefill the reservation field and continue the
                 verification flow more quickly.
               </p>
             </div>
@@ -352,7 +352,7 @@ export default function ClinicInterface({
                         <div className="grid gap-3 sm:grid-cols-2">
                           <div>
                             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                              Voucher
+                              Reservation
                             </div>
                             <div className="mt-1 break-all font-mono text-xs text-slate-600">
                               {caseItem.voucher_id}
@@ -391,7 +391,7 @@ export default function ClinicInterface({
                   <thead className="bg-slate-50">
                     <tr className="text-xs uppercase tracking-[0.18em] text-slate-400">
                       <th className="px-4 py-4 font-semibold">Anonymous ID</th>
-                      <th className="px-4 py-4 font-semibold">Voucher</th>
+                      <th className="px-4 py-4 font-semibold">Reservation</th>
                       <th className="px-4 py-4 font-semibold">Amount</th>
                       <th className="px-4 py-4 font-semibold">Status</th>
                     </tr>

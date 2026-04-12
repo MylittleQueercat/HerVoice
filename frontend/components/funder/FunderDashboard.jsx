@@ -43,9 +43,7 @@ function MetricCard({ label, value, subtle = false }) {
       <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
         {label}
       </div>
-      <div className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
-        {value}
-      </div>
+      <div className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">{value}</div>
     </div>
   );
 }
@@ -134,9 +132,7 @@ export default function FunderDashboard({
               <div className="mt-1 text-sm font-semibold text-slate-900">
                 HerVoice Funding Network
               </div>
-              <div className="mt-1 text-xs text-slate-500">
-                Verified NGO account
-              </div>
+              <div className="mt-1 text-xs text-slate-500">Verified government account</div>
             </div>
 
             <button
@@ -173,16 +169,13 @@ export default function FunderDashboard({
                   Funding overview
                 </div>
                 <p className="mt-3 text-sm text-slate-500">
-                  Funding and voucher activity across the network.
+                  Funding and reservations across the network.
                 </p>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
-                <MetricCard
-                  label="Total cases"
-                  value={dashboard?.total_cases ?? 0}
-                />
-                <MetricCard label="Confirmed" value={confirmedCount} />
+                <MetricCard label="Total reservations" value={dashboard?.total_cases ?? 0} />
+                <MetricCard label="Confirmed reservations" value={confirmedCount} />
                 <MetricCard
                   label="EUR committed"
                   value={`${dashboard?.total_xrp_locked ?? 0} EUR`}
@@ -204,17 +197,13 @@ export default function FunderDashboard({
                   Care operations
                 </div>
                 <p className="mt-3 text-sm text-slate-500">
-                  Live counts from clinics, patient cases, appointments, and proofs.
+                  Live counts from clinics, patients, appointments, and proofs.
                 </p>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <MetricCard label="Clinics" value={dashboard?.total_clinics ?? 0} subtle />
-                <MetricCard
-                  label="Patient cases"
-                  value={dashboard?.total_patient_cases ?? 0}
-                  subtle
-                />
+                <MetricCard label="Patients" value={dashboard?.total_patient_cases ?? 0} subtle />
                 <MetricCard
                   label="Appointments"
                   value={dashboard?.total_appointments ?? 0}
@@ -244,8 +233,8 @@ export default function FunderDashboard({
                 Funding cases
               </h1>
               <p className="text-sm text-slate-500">
-                Create new funding, link it to booked appointments, and then
-                review the active case list below.
+                Create new funding, link it to booked appointments, and then review the active case
+                list below.
               </p>
             </div>
 
@@ -295,7 +284,7 @@ export default function FunderDashboard({
                   </div>
                   <div>
                     <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-                      Voucher ID
+                      Reservation ID
                     </div>
                     <div className="mt-2 break-all font-mono text-emerald-950">
                       {createdCase.voucher_id}
@@ -313,9 +302,7 @@ export default function FunderDashboard({
                     <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
                       Status
                     </div>
-                    <div className="mt-2 font-semibold text-emerald-950">
-                      {createdCase.status}
-                    </div>
+                    <div className="mt-2 font-semibold text-emerald-950">{createdCase.status}</div>
                   </div>
                   <div className="md:col-span-2">
                     <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
@@ -328,7 +315,6 @@ export default function FunderDashboard({
                 </div>
               ) : null}
             </form>
-
           </div>
 
           <div className="mt-6 flex flex-col gap-6">
@@ -338,8 +324,8 @@ export default function FunderDashboard({
                   Link funding to a clinic appointment
                 </h2>
                 <p className="text-sm text-slate-500">
-                  Attach an existing funding case to a booked appointment
-                  before the clinic confirms care.
+                  Attach an existing funding case to a booked appointment before the clinic confirms
+                  care.
                 </p>
               </div>
 
@@ -366,9 +352,7 @@ export default function FunderDashboard({
 
                   {selectedClinic ? (
                     <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-600">
-                      <div className="font-semibold text-slate-900">
-                        {selectedClinic.name}
-                      </div>
+                      <div className="font-semibold text-slate-900">{selectedClinic.name}</div>
                       <div className="mt-1">{selectedClinic.doctor_name}</div>
                       <div className="mt-1">
                         {selectedClinic.address}, {selectedClinic.city}
@@ -376,9 +360,7 @@ export default function FunderDashboard({
                     </div>
                   ) : null}
 
-                  {isLoadingClinics ? (
-                    <DashboardSpinner text="Loading clinics..." />
-                  ) : null}
+                  {isLoadingClinics ? <DashboardSpinner text="Loading clinics..." /> : null}
 
                   {clinicsError ? (
                     <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
@@ -387,9 +369,7 @@ export default function FunderDashboard({
                   ) : null}
 
                   <div className="space-y-3">
-                    <div className="text-sm font-medium text-slate-700">
-                      Appointments
-                    </div>
+                    <div className="text-sm font-medium text-slate-700">Appointments</div>
 
                     {isLoadingAppointments ? (
                       <DashboardSpinner text="Loading clinic appointments..." />
@@ -413,8 +393,7 @@ export default function FunderDashboard({
                     {!isLoadingAppointments && appointments.length ? (
                       <div className="space-y-3">
                         {appointments.map((appointment) => {
-                          const isSelected =
-                            selectedAppointmentId === appointment.appointment_id;
+                          const isSelected = selectedAppointmentId === appointment.appointment_id;
                           const isLinked = Boolean(appointment.funding_case_id);
                           const wasJustLinked =
                             Boolean(linkSuccess) &&
@@ -424,11 +403,7 @@ export default function FunderDashboard({
                             <button
                               key={appointment.appointment_id}
                               type="button"
-                              onClick={() =>
-                                setSelectedAppointmentId(
-                                  appointment.appointment_id
-                                )
-                              }
+                              onClick={() => setSelectedAppointmentId(appointment.appointment_id)}
                               className={`w-full rounded-3xl border px-4 py-4 text-left transition ${
                                 wasJustLinked
                                   ? "border-emerald-300 bg-emerald-50/70 shadow-[0_12px_30px_rgba(16,185,129,0.10)]"
@@ -515,17 +490,14 @@ export default function FunderDashboard({
                     Choose funding case
                     <select
                       value={selectedFundingCaseId}
-                      onChange={(event) =>
-                        setSelectedFundingCaseId(event.target.value)
-                      }
+                      onChange={(event) => setSelectedFundingCaseId(event.target.value)}
                       className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300 focus:ring-2 focus:ring-rose-100"
                     >
                       <option value="">Select a funding case</option>
                       {linkableFundingCases.map((caseItem) => (
                         <option key={caseItem.case_id} value={caseItem.case_id}>
-                          {caseItem.amount_xrp} EUR - {formatStatusLabel(
-                            getUiStatus(caseItem)
-                          )} - {formatAnonymousId(caseItem.case_id)}
+                          {caseItem.amount_xrp} EUR - {formatStatusLabel(getUiStatus(caseItem))} -{" "}
+                          {formatAnonymousId(caseItem.case_id)}
                         </option>
                       ))}
                     </select>
@@ -569,9 +541,7 @@ export default function FunderDashboard({
             <section className="rounded-3xl border border-slate-100 bg-slate-50 p-5">
               <div className="flex flex-col gap-4 border-b border-slate-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold tracking-tight text-slate-900">
-                    Case list
-                  </h2>
+                  <h2 className="text-lg font-semibold tracking-tight text-slate-900">Case list</h2>
                   <p className="mt-1 text-sm text-slate-500">
                     Filter and review funding cases across the network.
                   </p>
@@ -605,92 +575,14 @@ export default function FunderDashboard({
               </div>
 
               <div className="mt-5 flex flex-col gap-6">
-            {groupedCases.length ? (
-              groupedCases.map(([country, cases]) => (
-                <div key={country} className="rounded-3xl border border-slate-100">
-                  <div className="border-b border-slate-100 bg-slate-50 px-5 py-4">
-                    <div className="text-sm font-semibold text-slate-900">
-                      {country}
-                    </div>
-                  </div>
+                {groupedCases.length ? (
+                  groupedCases.map(([country, cases]) => (
+                    <div key={country} className="rounded-3xl border border-slate-100">
+                      <div className="border-b border-slate-100 bg-slate-50 px-5 py-4">
+                        <div className="text-sm font-semibold text-slate-900">{country}</div>
+                      </div>
 
-                  <div className="space-y-3 px-4 py-4 md:hidden">
-                    {cases.map((caseItem) => {
-                      const status = getUiStatus(caseItem);
-                      const clinicConfirmed =
-                        caseItem.case_status === "released" ||
-                        caseItem.voucher_status === "redeemed";
-
-                      return (
-                        <div
-                          key={caseItem.case_id}
-                          className="rounded-2xl border border-slate-100 bg-white p-4"
-                        >
-                          <div className="flex flex-col gap-3">
-                            <div>
-                              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                                Anonymous ID
-                              </div>
-                              <div className="mt-1 break-all font-mono text-sm text-slate-900">
-                                {formatAnonymousId(caseItem.case_id)}
-                              </div>
-                            </div>
-
-                            <div className="grid gap-3 sm:grid-cols-2">
-                              <div>
-                                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                                  Voucher
-                                </div>
-                                <div className="mt-1 break-all font-mono text-xs text-slate-600">
-                                  {caseItem.voucher_id || "Not issued"}
-                                </div>
-                              </div>
-                              <div>
-                                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                                  Amount
-                                </div>
-                                <div className="mt-1 text-sm font-medium text-slate-900">
-                                  {caseItem.amount_xrp} EUR
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="flex flex-wrap gap-2">
-                              <span
-                                className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${getStatusClasses(
-                                  status
-                                )}`}
-                              >
-                                {formatStatusLabel(status)}
-                              </span>
-                              <span
-                                className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${
-                                  clinicConfirmed
-                                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                    : "border-slate-200 bg-slate-50 text-slate-600"
-                                }`}
-                              >
-                                {clinicConfirmed ? "Clinic confirmed" : "Clinic pending"}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div className="hidden overflow-x-auto md:block">
-                    <table className="min-w-full divide-y divide-slate-100 text-left">
-                      <thead className="bg-white">
-                        <tr className="text-xs uppercase tracking-[0.18em] text-slate-400">
-                          <th className="px-5 py-4 font-semibold">Anonymous ID</th>
-                          <th className="px-5 py-4 font-semibold">Voucher</th>
-                          <th className="px-5 py-4 font-semibold">Amount</th>
-                          <th className="px-5 py-4 font-semibold">Status</th>
-                          <th className="px-5 py-4 font-semibold">Clinic confirmed</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100 bg-white text-sm text-slate-700">
+                      <div className="space-y-3 px-4 py-4 md:hidden">
                         {cases.map((caseItem) => {
                           const status = getUiStatus(caseItem);
                           const clinicConfirmed =
@@ -698,49 +590,125 @@ export default function FunderDashboard({
                             caseItem.voucher_status === "redeemed";
 
                           return (
-                            <tr key={caseItem.case_id}>
-                              <td className="px-5 py-4 font-mono text-slate-900">
-                                {formatAnonymousId(caseItem.case_id)}
-                              </td>
-                              <td className="px-5 py-4 font-mono text-xs text-slate-600">
-                                {caseItem.voucher_id || "Not issued"}
-                              </td>
-                              <td className="px-5 py-4 font-medium text-slate-900">
-                                {caseItem.amount_xrp} EUR
-                              </td>
-                              <td className="px-5 py-4">
-                                <span
-                                  className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${getStatusClasses(
-                                    status
-                                  )}`}
-                                >
-                                  {formatStatusLabel(status)}
-                                </span>
-                              </td>
-                              <td className="px-5 py-4">
-                                <span
-                                  className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${
-                                    clinicConfirmed
-                                      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                      : "border-slate-200 bg-slate-50 text-slate-600"
-                                  }`}
-                                >
-                                  {clinicConfirmed ? "Yes" : "No"}
-                                </span>
-                              </td>
-                            </tr>
+                            <div
+                              key={caseItem.case_id}
+                              className="rounded-2xl border border-slate-100 bg-white p-4"
+                            >
+                              <div className="flex flex-col gap-3">
+                                <div>
+                                  <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                                    Anonymous ID
+                                  </div>
+                                  <div className="mt-1 break-all font-mono text-sm text-slate-900">
+                                    {formatAnonymousId(caseItem.case_id)}
+                                  </div>
+                                </div>
+
+                                <div className="grid gap-3 sm:grid-cols-2">
+                                  <div>
+                                    <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                                      Reservation
+                                    </div>
+                                    <div className="mt-1 break-all font-mono text-xs text-slate-600">
+                                      {caseItem.voucher_id || "Not issued"}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                                      Amount
+                                    </div>
+                                    <div className="mt-1 text-sm font-medium text-slate-900">
+                                      {caseItem.amount_xrp} EUR
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="flex flex-wrap gap-2">
+                                  <span
+                                    className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${getStatusClasses(
+                                      status
+                                    )}`}
+                                  >
+                                    {formatStatusLabel(status)}
+                                  </span>
+                                  <span
+                                    className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${
+                                      clinicConfirmed
+                                        ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                        : "border-slate-200 bg-slate-50 text-slate-600"
+                                    }`}
+                                  >
+                                    {clinicConfirmed ? "Clinic confirmed" : "Clinic pending"}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
                           );
                         })}
-                      </tbody>
-                    </table>
+                      </div>
+
+                      <div className="hidden overflow-x-auto md:block">
+                        <table className="min-w-full divide-y divide-slate-100 text-left">
+                          <thead className="bg-white">
+                            <tr className="text-xs uppercase tracking-[0.18em] text-slate-400">
+                              <th className="px-5 py-4 font-semibold">Anonymous ID</th>
+                              <th className="px-5 py-4 font-semibold">Reservation</th>
+                              <th className="px-5 py-4 font-semibold">Amount</th>
+                              <th className="px-5 py-4 font-semibold">Status</th>
+                              <th className="px-5 py-4 font-semibold">Clinic confirmed</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100 bg-white text-sm text-slate-700">
+                            {cases.map((caseItem) => {
+                              const status = getUiStatus(caseItem);
+                              const clinicConfirmed =
+                                caseItem.case_status === "released" ||
+                                caseItem.voucher_status === "redeemed";
+
+                              return (
+                                <tr key={caseItem.case_id}>
+                                  <td className="px-5 py-4 font-mono text-slate-900">
+                                    {formatAnonymousId(caseItem.case_id)}
+                                  </td>
+                                  <td className="px-5 py-4 font-mono text-xs text-slate-600">
+                                    {caseItem.voucher_id || "Not issued"}
+                                  </td>
+                                  <td className="px-5 py-4 font-medium text-slate-900">
+                                    {caseItem.amount_xrp} EUR
+                                  </td>
+                                  <td className="px-5 py-4">
+                                    <span
+                                      className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${getStatusClasses(
+                                        status
+                                      )}`}
+                                    >
+                                      {formatStatusLabel(status)}
+                                    </span>
+                                  </td>
+                                  <td className="px-5 py-4">
+                                    <span
+                                      className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${
+                                        clinicConfirmed
+                                          ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                          : "border-slate-200 bg-slate-50 text-slate-600"
+                                      }`}
+                                    >
+                                      {clinicConfirmed ? "Yes" : "No"}
+                                    </span>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="rounded-2xl border border-dashed border-slate-200 px-4 py-10 text-center text-sm text-slate-500">
+                    No funding cases match this filter yet.
                   </div>
-                </div>
-              ))
-            ) : (
-              <div className="rounded-2xl border border-dashed border-slate-200 px-4 py-10 text-center text-sm text-slate-500">
-                No funding cases match this filter yet.
-              </div>
-            )}
+                )}
               </div>
             </section>
           </div>

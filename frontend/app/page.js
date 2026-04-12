@@ -20,7 +20,7 @@ const PORTALS = [
   {
     href: "/clinic",
     title: "I am a clinic",
-    description: "Verify vouchers and confirm services.",
+    description: "Verify reservations and confirm services.",
     className: "bg-slate-900 text-white",
   },
 ];

@@ -15,7 +15,7 @@ export default function FunderLogin({
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-4">
             <BrandLogo />
-            <div className="inline-flex w-fit rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">
+            <div className="inline-flex w-fit rounded-full border border-rose-100 bg-rose-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#993556]">
               Funder / NGO portal
             </div>
           </div>
@@ -66,9 +66,22 @@ export default function FunderLogin({
             Sign in as a clinic instead
           </Link>
 
-          <p className="text-sm text-slate-500">
-            Access is restricted to verified funding organizations.
-          </p>
+          <div className="space-y-2 text-sm">
+            <p className="text-slate-500">
+              Access is restricted to verified funding organizations.
+            </p>
+            <p className="text-slate-500">
+              Not registered yet?{" "}
+              <Link
+                href="/contact"
+                target="_blank"
+                rel="noreferrer"
+                className="font-medium text-[#993556] underline-offset-4 transition hover:underline"
+              >
+                Contact us
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </main>
