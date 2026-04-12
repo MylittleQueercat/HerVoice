@@ -57,7 +57,12 @@ export default function StepSelector({ onSelect }) {
                   style={{ color: BRAND_COLOR }}
                 >
                   Choose this option
-                  <span className="transition group-hover:translate-x-1">-&gt;</span>
+                  <span
+                    aria-hidden="true"
+                    className="text-base leading-none transition group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
                 </div>
               </div>
             </button>
