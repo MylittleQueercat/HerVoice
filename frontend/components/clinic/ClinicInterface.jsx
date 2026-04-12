@@ -293,11 +293,14 @@ export default function ClinicInterface({
               })}
             </div>
 
-            <div>
-              <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
-                Incoming requests
-              </h2>
-            </div>
+              <div>
+                <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+                  Incoming requests
+                </h2>
+                <p className="mt-2 text-sm text-slate-500">
+                  Select a request below to open the reservation verification step.
+                </p>
+              </div>
 
             {isLoadingRequests ? <Spinner text="Loading incoming requests..." /> : null}
 
