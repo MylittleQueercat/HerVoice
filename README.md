@@ -65,6 +65,8 @@
 
 ## What Is HerVoice?
 
+**Live demo:** https://hervoicehackthon.vercel.app
+
 HerVoice is a cross-border platform prototype that reduces friction around abortion access for people in Europe who face domestic restrictions.
 
 Patients can select a clinic slot, create a funding case, and later verify their identity at the clinic — without their raw personal information ever being stored in the database. Clinics manage slots and receive payout only after patient identity is re-entered and matched on arrival. Funders lock support in **XRPL escrow**, and settlement is released on **XRPL Testnet** once verification succeeds.
